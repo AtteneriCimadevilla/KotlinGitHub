@@ -6,7 +6,8 @@ class Song(
     private val yearPublished: Int,
     private var playCount: Int
 ) {
-    var popular = (playCount >= 1000)
+    val popular: Boolean
+        get() = playCount >= 1000
 
     fun printSong() {
         println("$title, performed by $artist, was released in ${this.yearPublished}.")

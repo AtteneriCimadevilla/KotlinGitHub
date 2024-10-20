@@ -1,7 +1,7 @@
 package com.example.pmdm1
 
 fun main () {
-    val myPhone = FoldablePhone(false, true)
+    val myPhone = FoldablePhone()
     myPhone.showInfo()
     printInRed("Let's switch it on.")
     myPhone.switchOn()
@@ -28,9 +28,8 @@ open class Phone(open var isScreenLightOn: Boolean = false){
 }
 
 class FoldablePhone(
-    isScreenLightOn: Boolean,
     var isFolded: Boolean = true
-): Phone(isScreenLightOn) {
+): Phone() {
     override fun switchOn() {
         if (!isFolded) super.switchOn()
         else println("I can't switch on the phone, it's folded.")
