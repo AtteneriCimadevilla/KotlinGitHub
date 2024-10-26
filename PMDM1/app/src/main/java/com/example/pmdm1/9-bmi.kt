@@ -1,7 +1,6 @@
 package com.example.pmdm1
 
 fun calcBMI(height: Double = 0.0, weight: Double = 0.0): Double {
-    val dividend = height * height
     val bmi = weight / (height * height)
     return bmi
 }
