@@ -1,6 +1,7 @@
 package com.example.challengewithfunctions
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -14,28 +15,54 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+
+        val button: Button = findViewById( R.id.button)
+
+        val errorMessage: TextView = findViewById(R.id.textViewError)
+        val tins: TextView = findViewById(R.id.textViewTins)
+
+        button.setOnClickListener {
+
+            try {
+                errorMessage.text = ""
+
+                val performanceText: EditText = findViewById(R.id.editTextPerformance)
+                val heightText: EditText = findViewById(R.id.editTextHeight)
+                val widthText: EditText = findViewById(R.id.editTextWidth)
+                val coatsText: EditText = findViewById(R.id.editTextCoats)
+
+                val performanceString: String = performanceText.text.toString()
+                val heightString: String = heightText.text.toString()
+                val widthString: String = widthText.text.toString()
+                val coatsString: String = coatsText.text.toString()
+
+                val performanceDouble: Double = performanceString.toDouble()
+                val heightDouble: Double = heightString.toDouble()
+                val widthDouble: Double = widthString.toDouble()
+                val coatsInt: Int = coatsString.toInt()
+
+                if (performanceDouble == 0.0) {
+                    errorMessage.text = "Performance cannot be zero!"
+                } else {
+                    val howMany = howManyTins(performanceDouble, heightDouble, widthDouble, coatsInt)
+
+                    if (tins != null) {
+                        tins.text = if (howMany == 1) howMany.toString() + " tin" else howMany.toString() + " tins"
+                    }
+                }
+
+            } catch (e: Exception) {
+                errorMessage.text = "All fields must be filled in!"
+            }
+
+
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        //MAIN FUNCTIONALITY
-        val performanceText: EditText? = findViewById(R.id.editTextPerformance)
-        val performanceDouble: Double = performanceText.toString().toDouble()
-
-        val heightText: EditText? = findViewById(R.id.editTextHeight)
-        val heightDouble: Double = heightText.toString().toDouble()
-
-        val widthText: EditText? = findViewById(R.id.editTextWidth)
-        val widthDouble: Double = widthText.toString().toDouble()
-
-        val coatsText: EditText? = findViewById(R.id.editTextCoats)
-        val coatsInt: Int = coatsText.toString().toInt()
-
-        val tins: TextView? = findViewById(R.id.textViewTins)
-        if (tins != null) {
-            tins.text = howManyTins(performanceDouble, heightDouble, widthDouble, coatsInt).toString()
         }
     }
 

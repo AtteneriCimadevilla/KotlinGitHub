@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ChallengeWithFunctions</string>
+    <string name="performance">performance</string>
+    <string name="m2_tin">m2/tin</string>
+    <string name="height">height</string>
+    <string name="meters">meters</string>
+    <string name="width">width</string>
+    <string name="coats">coats</string>
+    <string name="calculate">CALCULATE</string>
+    <string name="x_tins">X tins</string>
+    <string name="number_of_coats">number of coats</string>
+</resources>

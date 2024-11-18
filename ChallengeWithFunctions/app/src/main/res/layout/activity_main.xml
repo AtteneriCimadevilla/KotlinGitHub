@@ -23,7 +23,8 @@
             android:ems="10"
             android:inputType="numberDecimal"
             android:minHeight="60dp"
-            android:text="10" />
+            android:hint="@string/performance"
+            android:maxLength="5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,8 +50,8 @@
             android:ems="10"
             android:inputType="numberDecimal"
             android:minHeight="60dp"
-            android:text="10"
-            tools:ignore="TextFields" />
+            android:hint="@string/height"
+            android:maxLength="5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,7 +77,8 @@
             android:ems="10"
             android:inputType="numberDecimal"
             android:minHeight="60dp"
-            android:text="10" />
+            android:hint="@string/width"
+            android:maxLength="5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,9 +103,10 @@
             android:layout_marginBottom="20dp"
             android:autofillHints="coats"
             android:ems="10"
-            android:hint="10"
-            android:inputType="numberDecimal"
-            android:minHeight="60dp" />
+            android:hint="@string/number_of_coats"
+            android:inputType="number"
+            android:minHeight="60dp"
+            android:maxLength="5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,18 +119,36 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="60dp"
         android:text="@string/calculate" />
 
-    <TextView
-        android:id="@+id/textViewTins"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:text="@string/x_tins"
-        android:textSize="20sp" />
+        android:layout_height="250dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewTins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:text=""
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/textViewError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:text=""
+            android:textSize="20sp" />
+
+    </LinearLayout>
 
 </LinearLayout>
