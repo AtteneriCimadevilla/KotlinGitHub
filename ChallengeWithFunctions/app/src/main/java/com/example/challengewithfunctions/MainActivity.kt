@@ -1,6 +1,10 @@
 package com.example.challengewithfunctions
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -24,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         button.setOnClickListener {
 
+            hideKeyboard()
+
             try {
                 errorMessage.text = ""
 
@@ -43,17 +49,14 @@ class MainActivity : AppCompatActivity() {
                 val coatsInt: Int = coatsString.toInt()
 
                 if (performanceDouble == 0.0) {
-                    errorMessage.text = "Performance cannot be zero!"
+                    errorMessage.text = getString(R.string.performance_cannot_be_zero)
                 } else {
                     val howMany = howManyTins(performanceDouble, heightDouble, widthDouble, coatsInt)
-
-                    if (tins != null) {
-                        tins.text = if (howMany == 1) howMany.toString() + " tin" else howMany.toString() + " tins"
-                    }
+                    tins.text = if (howMany == 1) "$howMany tin" else "$howMany tins"
                 }
 
             } catch (e: Exception) {
-                errorMessage.text = "All fields must be filled in!"
+                errorMessage.text = getString(R.string.all_fields_must_be_filled_in)
             }
 
 
@@ -70,4 +73,14 @@ class MainActivity : AppCompatActivity() {
         val tinsDouble: Double = ceil(((height * width) * coats) / performance)
         return tinsDouble.toInt()
     }
+
+    private fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
 }
