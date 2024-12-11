@@ -42,8 +42,9 @@ public class Main implements ApplicationListener {
     Rectangle bucketRectangle;
     Rectangle dropRectangle;
 
-    private int score;
+    private int score, lives;
     private String showScore = "Score: ";
+    private String showLives = "Lives: ";
     BitmapFont bitmapFontName;
 
     @Override
@@ -73,7 +74,7 @@ public class Main implements ApplicationListener {
         music.play();
 
         score = 0;
-        showScore = "score: 0";
+        lives = 5;
         bitmapFontName = new BitmapFont();
         bitmapFontName.getData().setScale(2);
     }
@@ -131,8 +132,10 @@ public class Main implements ApplicationListener {
                 dropSprites.removeIndex(i);
                 dropSound.play(); // Play the sound
 
-                // SCORE:
+                // CHANGE SCORE:
                 score++;
+                // CHANGE LIVES:
+                if (score % 10 == 0) lives++;
             }
         }
 
@@ -163,6 +166,7 @@ public class Main implements ApplicationListener {
         // SCORE:
         bitmapFontName.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         bitmapFontName.draw(spriteBatch, showScore + score, 50, 450);
+        bitmapFontName.draw(spriteBatch, showLives + lives, 50, 425);
 
         spriteBatch.end();
     }
