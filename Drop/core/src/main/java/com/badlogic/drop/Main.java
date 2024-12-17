@@ -25,6 +25,7 @@ public class Main implements ApplicationListener {
     Texture backgroundTexture;
     Texture bucketTexture;
     Texture dropTexture;
+    Texture toxicDropTexture;
     Sound dropSound;
     Music music;
 
@@ -36,22 +37,29 @@ public class Main implements ApplicationListener {
     Vector2 touchPos;
 
     Array<Sprite> dropSprites;
+    Array<Sprite> toxicDropSprites;
 
     float dropTimer;
 
     Rectangle bucketRectangle;
     Rectangle dropRectangle;
+    Rectangle toxicDropRectangle;
 
     private int score, lives;
     private String showScore = "Score: ";
     private String showLives = "Lives: ";
     BitmapFont bitmapFontName;
+    BitmapFont bitmapFontGameOver;
+
+    float gameOverTimer;
+    float gameOverDelay = 30f;
 
     @Override
     public void create() {
         backgroundTexture = new Texture("background.png");
         bucketTexture = new Texture("bucket.png");
         dropTexture = new Texture("drop.png");
+        toxicDropTexture = new Texture("toxic-drop.png");
 
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
@@ -65,9 +73,11 @@ public class Main implements ApplicationListener {
         touchPos = new Vector2();
 
         dropSprites = new Array<>();
+        toxicDropSprites = new Array<>();
 
         bucketRectangle = new Rectangle();
         dropRectangle = new Rectangle();
+        toxicDropRectangle = new Rectangle();
 
         music.setLooping(true);
         music.setVolume(.5f);
@@ -77,6 +87,8 @@ public class Main implements ApplicationListener {
         lives = 5;
         bitmapFontName = new BitmapFont();
         bitmapFontName.getData().setScale(2);
+        bitmapFontGameOver = new BitmapFont();
+        bitmapFontGameOver.getData().setScale(5);
     }
 
     @Override
@@ -86,13 +98,21 @@ public class Main implements ApplicationListener {
 
     @Override
     public void render() {
-        input();
-        logic();
+        if(lives > 0) {
+            input();
+            logic();
+        } else {
+            if(gameOverTimer > gameOverDelay) {
+                Gdx.app.exit();
+            } else {
+                gameOverTimer += Gdx.graphics.getDeltaTime();
+            }
+        }
         draw();
     }
 
     private void input() {
-        float speed = 4f;
+        float speed = 400f;
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -101,10 +121,17 @@ public class Main implements ApplicationListener {
             bucketSprite.translateX(-speed * delta);
         }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            bucketSprite.translateY(speed * delta);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            bucketSprite.translateY(-speed * delta);
+        }
+
         if (Gdx.input.isTouched()) {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
             viewport.unproject(touchPos); // Convert the units to the world units of the viewport
             bucketSprite.setCenterX(touchPos.x); // Change the horizontally centered position of the bucket
+            bucketSprite.setCenterY(touchPos.y);
         }
     }
 
@@ -115,6 +142,7 @@ public class Main implements ApplicationListener {
         float bucketHeight = bucketSprite.getHeight();
 
         bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth));
+        bucketSprite.setY(MathUtils.clamp(bucketSprite.getY(), 0, worldHeight - bucketHeight));
 
         float delta = Gdx.graphics.getDeltaTime();
         bucketRectangle.set(bucketSprite.getX(), bucketSprite.getY(), bucketWidth, bucketHeight);
@@ -139,6 +167,24 @@ public class Main implements ApplicationListener {
             }
         }
 
+        for (int i = toxicDropSprites.size - 1; i >= 0; i--) {
+            Sprite toxicDropSprite = toxicDropSprites.get(i);
+            float toxicDropWidth = toxicDropSprite.getWidth();
+            float toxicDropHeight = toxicDropSprite.getHeight();
+
+            toxicDropSprite.translateY(-200f * delta);
+            toxicDropRectangle.set(toxicDropSprite.getX(), toxicDropSprite.getY(), toxicDropWidth, toxicDropHeight);
+
+            if (toxicDropSprite.getY() < -toxicDropHeight) toxicDropSprites.removeIndex(i);
+            else if (bucketRectangle.overlaps(toxicDropRectangle)) {
+                toxicDropSprites.removeIndex(i);
+                dropSound.play(); // Play the sound
+
+                // CHANGE LIVES:
+                lives--;
+            }
+        }
+
         dropTimer += delta;
         if (dropTimer > 1f) {
             dropTimer = 0;
@@ -156,11 +202,23 @@ public class Main implements ApplicationListener {
         float worldHeight = viewport.getWorldHeight();
 
         spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
-        bucketSprite.draw(spriteBatch);
 
-        // draw each sprite
-        for (Sprite dropSprite : dropSprites) {
-            dropSprite.draw(spriteBatch);
+        if (lives <= 0) {
+
+            bitmapFontGameOver.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+            bitmapFontGameOver.draw(spriteBatch, "GAME OVER", 200, 200);
+
+        } else {
+            bucketSprite.draw(spriteBatch);
+
+            // draw each sprite
+            for (Sprite dropSprite : dropSprites) {
+                dropSprite.draw(spriteBatch);
+            }
+
+            for (Sprite toxicDropSprite : toxicDropSprites) {
+                toxicDropSprite.draw(spriteBatch);
+            }
         }
 
         // SCORE:
@@ -174,6 +232,8 @@ public class Main implements ApplicationListener {
     private void createDroplet() {
         float dropWidth = 100;
         float dropHeight = 100;
+        float toxicDropWidth = 100;
+        float toxicDropHeight = 100;
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
 
@@ -182,6 +242,13 @@ public class Main implements ApplicationListener {
         dropSprite.setX(MathUtils.random(0f, worldWidth - dropWidth)); // Randomize the drop's x position
         dropSprite.setY(worldHeight);
         dropSprites.add(dropSprite);
+
+        Sprite toxicDropSprite = new Sprite(toxicDropTexture);
+        toxicDropSprite.setSize(toxicDropWidth, toxicDropHeight);
+        toxicDropSprite.setX(MathUtils.random(0f, worldWidth - toxicDropWidth)); // Randomize the drop's x position
+        toxicDropSprite.setY(worldHeight);
+        toxicDropSprites.add(toxicDropSprite);
+
     }
 
     @Override
