@@ -53,6 +53,7 @@ public class Main implements ApplicationListener {
 
     float gameOverTimer;
     float gameOverDelay = 30f;
+    float dropSpeed = -200f;
 
     @Override
     public void create() {
@@ -152,7 +153,8 @@ public class Main implements ApplicationListener {
             float dropWidth = dropSprite.getWidth();
             float dropHeight = dropSprite.getHeight();
 
-            dropSprite.translateY(-200f * delta);
+            dropSprite.translateY(dropSpeed * delta);
+
             dropRectangle.set(dropSprite.getX(), dropSprite.getY(), dropWidth, dropHeight);
 
             if (dropSprite.getY() < -dropHeight) dropSprites.removeIndex(i);
@@ -163,7 +165,10 @@ public class Main implements ApplicationListener {
                 // CHANGE SCORE:
                 score++;
                 // CHANGE LIVES:
-                if (score % 10 == 0) lives++;
+                if (score % 10 == 0) {
+                    lives++;
+                    dropSpeed -= 200;
+                }
             }
         }
 
@@ -172,7 +177,7 @@ public class Main implements ApplicationListener {
             float toxicDropWidth = toxicDropSprite.getWidth();
             float toxicDropHeight = toxicDropSprite.getHeight();
 
-            toxicDropSprite.translateY(-200f * delta);
+            toxicDropSprite.translateY(dropSpeed * delta);
             toxicDropRectangle.set(toxicDropSprite.getX(), toxicDropSprite.getY(), toxicDropWidth, toxicDropHeight);
 
             if (toxicDropSprite.getY() < -toxicDropHeight) toxicDropSprites.removeIndex(i);
