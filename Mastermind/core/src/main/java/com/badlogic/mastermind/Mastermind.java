@@ -106,7 +106,7 @@ public class Mastermind extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    // reset the board, initalize game
+    // reset the board, initialize game
     public void initValues() {
         //ask for and set game mode
         Object[] options = {"Codebreaker", "Codemaker"};
@@ -129,7 +129,7 @@ public class Mastermind extends JFrame implements ActionListener {
                 key[i].setVis(false);
                 key[i].setCurrColor((rand.nextInt(6) + 1));
             } else {
-                // user input if in codemaker mode
+                // user input if in CodeMaker mode
                 key[i].setCurrColor(0);
                 key[i].setEdit(true);
             }
