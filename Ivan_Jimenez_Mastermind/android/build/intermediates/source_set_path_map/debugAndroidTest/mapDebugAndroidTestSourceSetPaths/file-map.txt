@@ -1,0 +1,4 @@
+com.example.ivanmastermind.test.android-androidTest-0 C:\GitHub\KotlinGitHub\Ivan_Jimenez_Mastermind\android\build\generated\res\resValues\androidTest\debug
+com.example.ivanmastermind.test.android-mergeDebugAndroidTestResources-1 C:\GitHub\KotlinGitHub\Ivan_Jimenez_Mastermind\android\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.example.ivanmastermind.test.android-mergeDebugAndroidTestResources-2 C:\GitHub\KotlinGitHub\Ivan_Jimenez_Mastermind\android\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.example.ivanmastermind.test.android-debugAndroidTest-3 C:\GitHub\KotlinGitHub\Ivan_Jimenez_Mastermind\android\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
